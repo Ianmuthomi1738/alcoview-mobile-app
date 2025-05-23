@@ -9,6 +9,7 @@ import HomePage from '../components/HomePage';
 import ProductDetail from '../components/ProductDetail';
 import ShoppingCart from '../components/ShoppingCart';
 import Checkout from '../components/Checkout';
+import FooterNavigation from '../components/FooterNavigation';
 
 type View = 
   | 'welcome' 
@@ -51,6 +52,13 @@ const Index = () => {
 
   const handleOrderComplete = () => {
     setCurrentView('orderConfirmation');
+  };
+
+  const handleFooterNavigation = (view: View) => {
+    if (isLoggedIn) {
+      setCurrentView(view);
+      setIsMenuOpen(false);
+    }
   };
 
   return (
@@ -157,7 +165,7 @@ const Index = () => {
       )}
 
       {/* Main Content */}
-      <main className="relative z-10">
+      <main className="relative z-10 pb-20">
         {currentView === 'welcome' && (
           <WelcomeScreen 
             onLogin={() => setCurrentView('login')}
@@ -186,7 +194,7 @@ const Index = () => {
         )}
         
         {currentView === 'home' && isLoggedIn && (
-          <HomePage />
+          <HomePage onProductSelect={handleProductSelect} />
         )}
         
         {currentView === 'product' && isLoggedIn && (
@@ -233,16 +241,12 @@ const Index = () => {
         )}
       </main>
       
-      {/* Chat Support Button (only visible when logged in) */}
-      {isLoggedIn && currentView !== 'profile' && (
-        <div className="fixed bottom-6 right-6 z-20">
-          <button
-            onClick={() => setIsChatOpen(!isChatOpen)}
-            className="w-14 h-14 rounded-full bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-center shadow-lg transition-all"
-          >
-            <MessageCircle size={24} />
-          </button>
-        </div>
+      {/* Footer Navigation - only show when logged in */}
+      {isLoggedIn && (
+        <FooterNavigation 
+          currentView={currentView}
+          onNavigate={handleFooterNavigation}
+        />
       )}
       
       {/* Chat Box */}
