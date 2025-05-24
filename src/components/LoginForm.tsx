@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface LoginFormProps {
   onLogin: (userType?: string) => void;
@@ -17,6 +18,27 @@ const LoginForm = ({ onLogin, onSwitchToRegister, onBack }: LoginFormProps) => {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const testCredentials = [
+    {
+      role: 'Admin',
+      email: 'admin@alcohnex.com',
+      password: 'admin123',
+      description: 'Full system access'
+    },
+    {
+      role: 'Vendor',
+      email: 'vendor@alcohnex.com',
+      password: 'vendor123',
+      description: 'Vendor panel access'
+    },
+    {
+      role: 'Customer',
+      email: 'user@alcohnex.com',
+      password: 'user123',
+      description: 'Customer experience'
+    }
+  ];
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -42,9 +64,17 @@ const LoginForm = ({ onLogin, onSwitchToRegister, onBack }: LoginFormProps) => {
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
-      // Check if admin credentials (demo purpose)
-      const isAdmin = formData.identifier === 'admin' && formData.password === 'admin';
-      onLogin(isAdmin ? 'admin' : 'user');
+      // Check credentials and determine user type
+      const isAdmin = formData.identifier === 'admin@alcohnex.com' && formData.password === 'admin123';
+      const isVendor = formData.identifier === 'vendor@alcohnex.com' && formData.password === 'vendor123';
+      
+      if (isAdmin) {
+        onLogin('admin');
+      } else if (isVendor) {
+        onLogin('vendor');
+      } else {
+        onLogin('user');
+      }
     }, 1500);
   };
 
@@ -55,6 +85,11 @@ const LoginForm = ({ onLogin, onSwitchToRegister, onBack }: LoginFormProps) => {
     }
   };
 
+  const fillCredentials = (email: string, password: string) => {
+    setFormData({ identifier: email, password });
+    setErrors({});
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4 flex items-center justify-center relative overflow-hidden">
       {/* Animated Background Elements */}
@@ -63,7 +98,8 @@ const LoginForm = ({ onLogin, onSwitchToRegister, onBack }: LoginFormProps) => {
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-orange-200/30 to-pink-200/30 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      <div className="w-full max-w-md relative z-10">
+      <div className="w-full max-w-4xl relative z-10 grid lg:grid-cols-2 gap-8">
+        {/* Login Form */}
         <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/20">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-gradient-to-br from-orange-500 via-orange-600 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transform hover:scale-105 transition-transform duration-200">
@@ -71,7 +107,6 @@ const LoginForm = ({ onLogin, onSwitchToRegister, onBack }: LoginFormProps) => {
             </div>
             <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">Welcome Back</h2>
             <p className="text-gray-600">Sign in to continue your journey</p>
-            <p className="text-xs text-orange-600 mt-2">Demo: admin/admin for admin panel</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -157,6 +192,44 @@ const LoginForm = ({ onLogin, onSwitchToRegister, onBack }: LoginFormProps) => {
               Don't have an account? Sign up
             </button>
           </div>
+        </div>
+
+        {/* Test Credentials Panel */}
+        <div className="space-y-4">
+          <Card className="bg-white/90 backdrop-blur-lg border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold text-gray-800">Demo Credentials</CardTitle>
+              <CardDescription>Click any credential below to auto-fill the login form</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {testCredentials.map((cred, index) => (
+                <div 
+                  key={index}
+                  onClick={() => fillCredentials(cred.email, cred.password)}
+                  className="p-4 border rounded-xl hover:bg-orange-50 cursor-pointer transition-colors border-gray-200 hover:border-orange-300"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-gray-800">{cred.role}</span>
+                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{cred.description}</span>
+                  </div>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <div><span className="font-medium">Email:</span> {cred.email}</div>
+                    <div><span className="font-medium">Password:</span> {cred.password}</div>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200">
+            <CardContent className="p-4">
+              <div className="text-center">
+                <div className="text-orange-600 mb-2">🎯</div>
+                <h3 className="font-semibold text-orange-800 mb-1">Quick Testing</h3>
+                <p className="text-sm text-orange-700">Use the demo accounts above to explore different user experiences and admin features.</p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

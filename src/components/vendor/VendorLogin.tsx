@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Building2, ArrowLeft } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Building2, ArrowLeft, User, Key } from 'lucide-react';
 
 interface VendorLoginProps {
   onLogin: () => void;
@@ -17,6 +18,11 @@ const VendorLogin = ({ onLogin, onBack }: VendorLoginProps) => {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const demoCredentials = {
+    email: 'vendor@alcohnex.com',
+    password: 'vendor123'
+  };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -43,7 +49,7 @@ const VendorLogin = ({ onLogin, onBack }: VendorLoginProps) => {
     setTimeout(() => {
       setIsLoading(false);
       // Check if vendor credentials (demo purpose)
-      const isVendor = formData.identifier === 'vendor' && formData.password === 'vendor';
+      const isVendor = formData.identifier === demoCredentials.email && formData.password === demoCredentials.password;
       if (isVendor) {
         onLogin();
       } else {
@@ -59,6 +65,14 @@ const VendorLogin = ({ onLogin, onBack }: VendorLoginProps) => {
     }
   };
 
+  const fillDemoCredentials = () => {
+    setFormData({
+      identifier: demoCredentials.email,
+      password: demoCredentials.password
+    });
+    setErrors({});
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 p-4 flex items-center justify-center relative overflow-hidden">
       {/* Animated Background Elements */}
@@ -67,7 +81,8 @@ const VendorLogin = ({ onLogin, onBack }: VendorLoginProps) => {
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-teal-200/30 to-green-200/30 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      <div className="w-full max-w-md relative z-10">
+      <div className="w-full max-w-4xl relative z-10 grid lg:grid-cols-2 gap-8">
+        {/* Login Form */}
         <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/20">
           <button
             onClick={onBack}
@@ -83,7 +98,6 @@ const VendorLogin = ({ onLogin, onBack }: VendorLoginProps) => {
             </div>
             <h2 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-2">Vendor Portal</h2>
             <p className="text-gray-600">Access your business dashboard</p>
-            <p className="text-xs text-green-600 mt-2">Demo: vendor/vendor</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -157,6 +171,57 @@ const VendorLogin = ({ onLogin, onBack }: VendorLoginProps) => {
           <div className="text-center mt-6 text-sm text-gray-500">
             <p>Need help? Contact support</p>
           </div>
+        </div>
+
+        {/* Demo Credentials Panel */}
+        <div className="space-y-4">
+          <Card className="bg-white/90 backdrop-blur-lg border border-white/20">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold text-green-800 flex items-center gap-2">
+                <Building2 size={24} />
+                Demo Vendor Access
+              </CardTitle>
+              <CardDescription>Click below to auto-fill vendor credentials</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div 
+                onClick={fillDemoCredentials}
+                className="p-4 border rounded-xl hover:bg-green-50 cursor-pointer transition-colors border-green-200 hover:border-green-300 bg-gradient-to-r from-green-50 to-emerald-50"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-semibold text-green-800">Vendor Account</span>
+                  <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">Demo Access</span>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm text-green-700">
+                    <User size={16} />
+                    <span className="font-medium">Email:</span> 
+                    <span className="font-mono bg-white px-2 py-1 rounded">{demoCredentials.email}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-green-700">
+                    <Key size={16} />
+                    <span className="font-medium">Password:</span> 
+                    <span className="font-mono bg-white px-2 py-1 rounded">{demoCredentials.password}</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-r from-emerald-50 to-green-50 border border-green-200">
+            <CardContent className="p-4">
+              <div className="text-center">
+                <div className="text-green-600 mb-2">🏪</div>
+                <h3 className="font-semibold text-green-800 mb-1">Vendor Features</h3>
+                <ul className="text-sm text-green-700 space-y-1">
+                  <li>• Manage Products & Inventory</li>
+                  <li>• View & Fulfill Orders</li>
+                  <li>• Track Deliveries</li>
+                  <li>• Access Sales Analytics</li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
