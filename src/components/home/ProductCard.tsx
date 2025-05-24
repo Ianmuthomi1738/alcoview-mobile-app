@@ -1,7 +1,7 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Star } from 'lucide-react';
+import { Star, Heart } from 'lucide-react';
 import { Product } from '@/data/products';
 import { toast } from "@/hooks/use-toast";
 
@@ -9,9 +9,13 @@ interface ProductCardProps {
   product: Product;
   onProductClick: (product: Product) => void;
   addToCart: (product: Product) => void;
+  isLoggedIn?: boolean;
+  onLoginPrompt?: () => void;
 }
 
-const ProductCard = ({ product, onProductClick, addToCart }: ProductCardProps) => {
+const ProductCard = ({ product, onProductClick, addToCart, isLoggedIn = true, onLoginPrompt }: ProductCardProps) => {
+  const [isInWishlist, setIsInWishlist] = useState(false);
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     addToCart(product);
@@ -21,10 +25,38 @@ const ProductCard = ({ product, onProductClick, addToCart }: ProductCardProps) =
     });
   };
 
+  const handleWishlistToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (!isLoggedIn) {
+      onLoginPrompt?.();
+      return;
+    }
+
+    setIsInWishlist(!isInWishlist);
+    toast({
+      title: isInWishlist ? "Removed from wishlist" : "Added to wishlist",
+      description: `${product.name} has been ${isInWishlist ? 'removed from' : 'added to'} your wishlist.`,
+    });
+  };
+
   return (
-    <div 
-      className="bg-white border rounded-lg overflow-hidden hover:shadow-md transition-all duration-200 hover:scale-105"
-    >
+    <div className="bg-white border rounded-lg overflow-hidden hover:shadow-md transition-all duration-200 hover:scale-105 relative">
+      {/* Wishlist Button */}
+      <button
+        onClick={handleWishlistToggle}
+        className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white transition-all duration-200 shadow-md hover:shadow-lg"
+      >
+        <Heart 
+          size={20} 
+          className={`transition-all duration-200 ${
+            isInWishlist 
+              ? 'text-pink-500 fill-pink-500' 
+              : 'text-gray-400 hover:text-pink-500'
+          }`}
+        />
+      </button>
+
       <div 
         className="h-48 sm:h-56 bg-gray-100 cursor-pointer overflow-hidden"
         onClick={() => onProductClick(product)}
@@ -35,6 +67,7 @@ const ProductCard = ({ product, onProductClick, addToCart }: ProductCardProps) =
           className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
         />
       </div>
+      
       <div className="p-4">
         <h3 
           className="font-medium mb-1 cursor-pointer hover:text-orange-600 transition-colors"

@@ -11,9 +11,11 @@ import ProductGrid from './home/ProductGrid';
 
 interface HomePageProps {
   onProductSelect: (productId: number) => void;
+  onLoginPrompt?: () => void;
+  isLoggedIn?: boolean;
 }
 
-const HomePage = ({ onProductSelect }: HomePageProps) => {
+const HomePage = ({ onProductSelect, onLoginPrompt, isLoggedIn = true }: HomePageProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [cartItems, setCartItems] = useState<Product[]>([]);
@@ -57,6 +59,8 @@ const HomePage = ({ onProductSelect }: HomePageProps) => {
         products={filteredProducts}
         onProductClick={handleProductClick}
         addToCart={addToCart}
+        isLoggedIn={isLoggedIn}
+        onLoginPrompt={onLoginPrompt}
       />
     </div>
   );

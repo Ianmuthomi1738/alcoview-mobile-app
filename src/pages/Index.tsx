@@ -12,6 +12,7 @@ import Checkout from '../components/Checkout';
 import FooterNavigation from '../components/FooterNavigation';
 import AdminPanel from '../components/admin/AdminPanel';
 import VendorPanel from '../components/vendor/VendorPanel';
+import VendorLogin from '../components/vendor/VendorLogin';
 import ReferralProgram from '../components/referral/ReferralProgram';
 import Wishlist from '../components/wishlist/Wishlist';
 import OrderHistory from '../components/orders/OrderHistory';
