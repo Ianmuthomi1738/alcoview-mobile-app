@@ -7,8 +7,9 @@ import UserManagement from './UserManagement';
 import ContentManagement from './ContentManagement';
 import AdminSettings from './AdminSettings';
 import NotificationsLogs from './NotificationsLogs';
+import SubscriptionManagement from './SubscriptionManagement';
 
-type AdminView = 'dashboard' | 'users' | 'content' | 'settings' | 'notifications';
+type AdminView = 'dashboard' | 'users' | 'content' | 'settings' | 'notifications' | 'subscriptions';
 
 interface AdminPanelProps {
   onLogout: () => void;
@@ -26,6 +27,8 @@ const AdminPanel = ({ onLogout }: AdminPanelProps) => {
         return <UserManagement />;
       case 'content':
         return <ContentManagement />;
+      case 'subscriptions':
+        return <SubscriptionManagement />;
       case 'settings':
         return <AdminSettings />;
       case 'notifications':

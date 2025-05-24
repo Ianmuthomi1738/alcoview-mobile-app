@@ -7,10 +7,14 @@ import ProfileSection from '../components/ProfileSection';
 import WelcomeScreen from '../components/WelcomeScreen';
 import HomePage from '../components/HomePage';
 import ProductDetail from '../components/ProductDetail';
-import ShoppingCart from '../components/ShoppingCart';
+import EnhancedShoppingCart from '../components/cart/EnhancedShoppingCart';
 import Checkout from '../components/Checkout';
 import FooterNavigation from '../components/FooterNavigation';
 import AdminPanel from '../components/admin/AdminPanel';
+import VendorPanel from '../components/vendor/VendorPanel';
+import ReferralProgram from '../components/referral/ReferralProgram';
+import Wishlist from '../components/wishlist/Wishlist';
+import OrderHistory from '../components/orders/OrderHistory';
 
 type View = 
   | 'welcome' 
@@ -22,20 +26,33 @@ type View =
   | 'cart' 
   | 'checkout'
   | 'orderConfirmation'
-  | 'admin';
+  | 'admin'
+  | 'vendor'
+  | 'search'
+  | 'wishlist'
+  | 'orders'
+  | 'referral';
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<View>('welcome');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isVendor, setIsVendor] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<number | undefined>(undefined);
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   const handleLogin = (userType = 'user') => {
     setIsLoggedIn(true);
-    setIsAdmin(userType === 'admin');
-    setCurrentView(userType === 'admin' ? 'admin' : 'home');
+    if (userType === 'admin') {
+      setIsAdmin(true);
+      setCurrentView('admin');
+    } else if (userType === 'vendor') {
+      setIsVendor(true);
+      setCurrentView('vendor');
+    } else {
+      setCurrentView('home');
+    }
   };
 
   const handleRegister = () => {
@@ -46,6 +63,7 @@ const Index = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setIsAdmin(false);
+    setIsVendor(false);
     setCurrentView('welcome');
     setIsMenuOpen(false);
   };
@@ -66,9 +84,11 @@ const Index = () => {
     }
   };
 
-  // Don't render header/footer for admin panel
-  if (currentView === 'admin' && isAdmin) {
-    return <AdminPanel onLogout={handleLogout} />;
+  // Don't render header/footer for admin or vendor panels
+  if ((currentView === 'admin' && isAdmin) || (currentView === 'vendor' && isVendor)) {
+    return currentView === 'admin' ? 
+      <AdminPanel onLogout={handleLogout} /> : 
+      <VendorPanel onLogout={handleLogout} />;
   }
 
   return (
@@ -94,7 +114,7 @@ const Index = () => {
             </h1>
           </div>
           
-          {isLoggedIn && !isAdmin && (
+          {isLoggedIn && !isAdmin && !isVendor && (
             <div className="flex items-center gap-4">
               {currentView === 'home' && (
                 <button
@@ -126,7 +146,7 @@ const Index = () => {
       </header>
 
       {/* Hamburger Menu */}
-      {isLoggedIn && !isAdmin && (
+      {isLoggedIn && !isAdmin && !isVendor && (
         <div className={`fixed inset-0 z-30 transition-all duration-300 ${isMenuOpen ? 'visible' : 'invisible'}`}>
           <div 
             className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}
@@ -148,6 +168,9 @@ const Index = () => {
               {[
                 { label: 'Home', view: 'home', icon: '🏠' },
                 { label: 'My Cart', view: 'cart', icon: '🛒' },
+                { label: 'My Orders', view: 'orders', icon: '📦' },
+                { label: 'Wishlist', view: 'wishlist', icon: '❤️' },
+                { label: 'Referral Program', view: 'referral', icon: '🎁' },
                 { label: 'Profile Settings', view: 'profile', icon: '👤' },
               ].map((item) => (
                 <button
@@ -206,6 +229,10 @@ const Index = () => {
         {currentView === 'home' && isLoggedIn && (
           <HomePage onProductSelect={handleProductSelect} />
         )}
+
+        {currentView === 'search' && isLoggedIn && (
+          <HomePage onProductSelect={handleProductSelect} />
+        )}
         
         {currentView === 'product' && isLoggedIn && (
           <ProductDetail 
@@ -215,10 +242,22 @@ const Index = () => {
         )}
         
         {currentView === 'cart' && isLoggedIn && (
-          <ShoppingCart 
+          <EnhancedShoppingCart 
             onBack={() => setCurrentView('home')}
             onCheckout={() => setCurrentView('checkout')}
           />
+        )}
+
+        {currentView === 'wishlist' && isLoggedIn && (
+          <Wishlist onBack={() => setCurrentView('home')} />
+        )}
+
+        {currentView === 'orders' && isLoggedIn && (
+          <OrderHistory onBack={() => setCurrentView('home')} />
+        )}
+
+        {currentView === 'referral' && isLoggedIn && (
+          <ReferralProgram />
         )}
         
         {currentView === 'checkout' && isLoggedIn && (
@@ -253,8 +292,8 @@ const Index = () => {
         )}
       </main>
       
-      {/* Footer Navigation - only show when logged in and not admin */}
-      {isLoggedIn && !isAdmin && (
+      {/* Footer Navigation - only show when logged in and not admin/vendor */}
+      {isLoggedIn && !isAdmin && !isVendor && (
         <FooterNavigation 
           currentView={currentView}
           onNavigate={handleFooterNavigation}
@@ -262,7 +301,7 @@ const Index = () => {
       )}
       
       {/* Chat Box */}
-      {isLoggedIn && !isAdmin && isChatOpen && (
+      {isLoggedIn && !isAdmin && !isVendor && isChatOpen && (
         <div className="fixed bottom-24 right-6 bg-white/95 backdrop-blur-lg shadow-2xl rounded-2xl w-80 z-20 border border-white/20 overflow-hidden">
           <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 flex justify-between items-center">
             <h3 className="font-semibold">Chat Support</h3>
@@ -294,7 +333,7 @@ const Index = () => {
       )}
 
       {/* Floating Chat Button */}
-      {isLoggedIn && !isAdmin && !isChatOpen && (
+      {isLoggedIn && !isAdmin && !isVendor && !isChatOpen && (
         <button
           onClick={() => setIsChatOpen(true)}
           className="fixed bottom-24 right-6 w-14 h-14 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group hover:scale-110 z-20"

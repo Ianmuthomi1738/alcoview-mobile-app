@@ -2,55 +2,49 @@
 import React from 'react';
 import { 
   LayoutDashboard, 
-  Users, 
-  FileText, 
-  Settings, 
-  Bell,
-  Crown,
+  Package, 
+  ShoppingBag, 
+  Truck,
+  BarChart3,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
 
-type AdminView = 'dashboard' | 'users' | 'content' | 'settings' | 'notifications' | 'subscriptions';
+type VendorView = 'dashboard' | 'products' | 'orders' | 'delivery' | 'analytics';
 
-interface AdminSidebarProps {
-  currentView: AdminView;
-  onViewChange: (view: AdminView) => void;
+interface VendorSidebarProps {
+  currentView: VendorView;
+  onViewChange: (view: VendorView) => void;
   collapsed: boolean;
   onToggleCollapse: () => void;
 }
 
-const AdminSidebar = ({ currentView, onViewChange, collapsed, onToggleCollapse }: AdminSidebarProps) => {
+const VendorSidebar = ({ currentView, onViewChange, collapsed, onToggleCollapse }: VendorSidebarProps) => {
   const menuItems = [
     {
-      id: 'dashboard' as AdminView,
+      id: 'dashboard' as VendorView,
       label: 'Dashboard',
       icon: LayoutDashboard,
     },
     {
-      id: 'users' as AdminView,
-      label: 'User Management',
-      icon: Users,
+      id: 'products' as VendorView,
+      label: 'Products',
+      icon: Package,
     },
     {
-      id: 'subscriptions' as AdminView,
-      label: 'Subscriptions',
-      icon: Crown,
+      id: 'orders' as VendorView,
+      label: 'Orders',
+      icon: ShoppingBag,
     },
     {
-      id: 'content' as AdminView,
-      label: 'Content Management',
-      icon: FileText,
+      id: 'delivery' as VendorView,
+      label: 'Delivery',
+      icon: Truck,
     },
     {
-      id: 'notifications' as AdminView,
-      label: 'Notifications & Logs',
-      icon: Bell,
-    },
-    {
-      id: 'settings' as AdminView,
-      label: 'Settings',
-      icon: Settings,
+      id: 'analytics' as VendorView,
+      label: 'Analytics',
+      icon: BarChart3,
     },
   ];
 
@@ -61,14 +55,14 @@ const AdminSidebar = ({ currentView, onViewChange, collapsed, onToggleCollapse }
         <div className="flex items-center justify-between">
           {!collapsed && (
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-lg">A</span>
+              <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-lg">V</span>
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Admin Panel
+                <h1 className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                  Vendor Panel
                 </h1>
-                <p className="text-xs text-gray-500">AlcohNex Management</p>
+                <p className="text-xs text-gray-500">AlcohNex Partner</p>
               </div>
             </div>
           )}
@@ -93,7 +87,7 @@ const AdminSidebar = ({ currentView, onViewChange, collapsed, onToggleCollapse }
               onClick={() => onViewChange(item.id)}
               className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group ${
                 isActive 
-                  ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg' 
+                  ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg' 
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
               title={collapsed ? item.label : undefined}
@@ -108,21 +102,8 @@ const AdminSidebar = ({ currentView, onViewChange, collapsed, onToggleCollapse }
           );
         })}
       </nav>
-
-      {/* Footer */}
-      {!collapsed && (
-        <div className="absolute bottom-4 left-4 right-4">
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-blue-200/50">
-            <p className="text-sm font-medium text-gray-700 mb-1">System Status</p>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-xs text-gray-600">All systems operational</span>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-export default AdminSidebar;
+export default VendorSidebar;
