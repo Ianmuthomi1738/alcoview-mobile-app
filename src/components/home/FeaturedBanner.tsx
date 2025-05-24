@@ -32,6 +32,9 @@ const FeaturedBanner = () => {
                   src="https://images.unsplash.com/photo-1569529465841-dfecdab7503b?w=300&h=400&fit=crop&auto=format" 
                   alt="Premium spirits collection" 
                   className="h-24 w-18 sm:h-32 sm:w-24 lg:h-40 lg:w-30 object-cover rounded-xl shadow-lg group-hover:shadow-2xl transition-all duration-300 transform group-hover:scale-105"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=400&fit=crop&auto=format";
+                  }}
                 />
                 <div className="absolute inset-0 bg-black/20 rounded-xl group-hover:bg-black/10 transition-all duration-300"></div>
               </div>
@@ -42,6 +45,9 @@ const FeaturedBanner = () => {
                   src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=300&h=400&fit=crop&auto=format" 
                   alt="Subscription package" 
                   className="h-24 w-18 sm:h-32 sm:w-24 lg:h-40 lg:w-30 object-cover rounded-xl shadow-lg group-hover:shadow-2xl transition-all duration-300 transform group-hover:scale-105"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=300&h=400&fit=crop&auto=format";
+                  }}
                 />
                 <div className="absolute inset-0 bg-black/20 rounded-xl group-hover:bg-black/10 transition-all duration-300"></div>
               </div>
@@ -49,9 +55,12 @@ const FeaturedBanner = () => {
               {/* Image 3 - Only visible on larger screens */}
               <div className="relative group hidden md:block">
                 <img 
-                  src="https://images.unsplash.com/photo-1564681775483-7e71b1b8dc73?w=300&h=400&fit=crop&auto=format" 
-                  alt="Premium bottle" 
+                  src="https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=300&h=400&fit=crop&auto=format" 
+                  alt="Premium subscription benefits" 
                   className="h-24 w-18 sm:h-32 sm:w-24 lg:h-40 lg:w-30 object-cover rounded-xl shadow-lg group-hover:shadow-2xl transition-all duration-300 transform group-hover:scale-105"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=400&fit=crop&auto=format";
+                  }}
                 />
                 <div className="absolute inset-0 bg-black/20 rounded-xl group-hover:bg-black/10 transition-all duration-300"></div>
               </div>

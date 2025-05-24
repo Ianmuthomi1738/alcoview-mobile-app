@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Home, ShoppingCart, User, MessageCircle, Search, Package, Heart } from 'lucide-react';
+import { Home, ShoppingCart, User, Search } from 'lucide-react';
 
 interface FooterNavigationProps {
   currentView: string;
@@ -22,22 +22,10 @@ const FooterNavigation = ({ currentView, onNavigate }: FooterNavigationProps) =>
       view: 'search'
     },
     {
-      id: 'wishlist',
-      label: 'Wishlist',
-      icon: Heart,
-      view: 'wishlist'
-    },
-    {
       id: 'cart',
       label: 'Cart',
       icon: ShoppingCart,
       view: 'cart'
-    },
-    {
-      id: 'orders',
-      label: 'Orders',
-      icon: Package,
-      view: 'orders'
     },
     {
       id: 'profile',
@@ -48,8 +36,8 @@ const FooterNavigation = ({ currentView, onNavigate }: FooterNavigationProps) =>
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200/50 px-2 py-1 z-30 shadow-2xl">
-      <div className="flex justify-around items-center max-w-md mx-auto">
+    <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200/50 px-4 py-2 z-30 shadow-2xl">
+      <div className="flex justify-around items-center max-w-sm mx-auto">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentView === item.view;
@@ -58,14 +46,14 @@ const FooterNavigation = ({ currentView, onNavigate }: FooterNavigationProps) =>
             <button
               key={item.id}
               onClick={() => onNavigate(item.view)}
-              className={`flex flex-col items-center py-2 px-2 rounded-xl transition-all duration-300 transform ${
+              className={`flex flex-col items-center py-2 px-3 rounded-xl transition-all duration-300 transform ${
                 isActive 
                   ? 'text-white bg-gradient-to-r from-orange-500 to-red-500 shadow-lg scale-105' 
                   : 'text-gray-600 hover:text-orange-600 hover:bg-orange-50 hover:scale-105'
               }`}
               aria-label={item.label}
             >
-              <Icon size={20} className={`${isActive ? 'animate-bounce' : ''}`} />
+              <Icon size={22} className={`${isActive ? 'animate-bounce' : ''}`} />
               <span className={`text-xs mt-1 font-medium ${isActive ? 'text-white' : ''}`}>
                 {item.label}
               </span>
